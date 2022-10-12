@@ -1,2 +1,0 @@
-# pavithra
-Edge detection
