@@ -1,0 +1,35 @@
+# pavithra
+#Edge detection
+from helper_functions import *
+datafolder = "C:/Users/honey/Downloads/assgn1code (1)/assgn1code/images/5.jpg"
+imgpath = datafolder
+# Convert the color image to grayscale and returns the grayscale pixels 
+pixel_values = read_colorimg(imgpath)
+# The returned pixel values INCLUDE 2 boundary rows and 2 boundary colns. Therefore,
+n_r = len(pixel_values) - 2
+n_c = len(pixel_values[0]) - 2
+# Creating a data structure to store updated pixel information
+new_pixel_values = [[0 for j in range(n_c)] for i in range(n_r)]
+# Defining the 3 x 3 mask as a tuple of tuples
+mask = [[-1,0,1], [-2,0,2], [-1,0,1]]
+
+# Implementing a function to slice a part from the image as a 2D list
+def get_slice_2d_list(pixel_values,a,v):
+    twod_list=[row[v-1:v+2] for row in pixel_values[a-1:a+2]]
+    return twod_list  
+# Implementing a function to flatten a 2D list or a 2D tuple
+def flatten(l):
+    return [e for sl in l for e in sl]
+# For each of the pixel values, excluding the boundary values Creating little local 3x3 box using list slicing
+for row in range(1,n_r+1):
+    new_pixel_values_row = []
+    for column in range(1,n_c+1):        
+        neighbour_pixels = get_slice_2d_list(pixel_values,row,column)
+        neighbour_pixels = flatten(neighbour_pixels)
+        mask_flat = flatten(mask)
+    # Applying the mask       
+        new_pixel_values[row-1][column-1] = sum(list(map(lambda a,v: a*v, neighbour_pixels, mask_flat)))        
+# Verifying the result
+verify_result(pixel_values, new_pixel_values, mask)
+# Viewing the original image and the edges of the image
+view_images(imgpath, new_pixel_values)
